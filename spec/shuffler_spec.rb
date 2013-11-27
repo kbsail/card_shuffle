@@ -20,13 +20,23 @@ describe Shuffler do
 
   end
 
+  describe '#cut_point' do
+    it 'takes a number as input' do
+      expect{dealer.cut_point}.to raise_error(ArgumentError)
+    end
+
+    it 'returns a count from the bottom' do
+      expect(dealer.cut_point(10)).to eq(42)
+    end
+  end
+
   describe '#top_break' do
     it 'returns the top cards' do
-      expect(dealer.top_break(25).last).to eq(52)
+      expect(dealer.top_break(27).last).to eq(52)
     end
 
     it 'returns the n number of cards' do
-      expect(dealer.top_break(25).length).to eq(25)
+      expect(dealer.top_break(27).length).to eq(27)
     end
 
   end
@@ -37,22 +47,23 @@ describe Shuffler do
     end
 
     it 'returns the remaining cards' do
-      expect(dealer.bottom_break(25).length).to eq(27)
+      expect(dealer.bottom_break(27).length).to eq(25)
     end
   end
 
   describe '#shuffle' do
     before do
-      dealer.stub(:bottom_break)
-      dealer.stub(:top_break)
+      # dealer.stub(:bottom_break)
+      # dealer.stub(:top_break)
+      # dealer.stub(:cut_point)
     end
     
-    it 'takes an break-point input' do
+    it 'takes an argument (number)' do
       expect{dealer.shuffle}.to raise_error(ArgumentError)
     end
 
     it 'calls #bottom_break' do
-      pending
+      expect{dealer}.to receive(:bottom_break)
     end
 
     it 'calls #top_break' do
