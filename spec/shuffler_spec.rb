@@ -20,16 +20,6 @@ describe Shuffler do
 
   end
 
-  describe '#cut_point' do
-    it 'takes a number as input' do
-      expect{dealer.cut_point}.to raise_error(ArgumentError)
-    end
-
-    it 'returns a count from the bottom' do
-      expect(dealer.cut_point(10)).to eq(42)
-    end
-  end
-
   describe '#top_break' do
     it 'returns the top cards' do
       expect(dealer.top_break(27).last).to eq(52)
