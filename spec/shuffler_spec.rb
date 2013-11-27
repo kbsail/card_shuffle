@@ -41,25 +41,46 @@ describe Shuffler do
     end
   end
 
-  describe '#shuffle' do
-    before do
-      # dealer.stub(:bottom_break)
-      # dealer.stub(:top_break)
-      # dealer.stub(:cut_point)
+  describe '#mix' do
+    it 'takes two inputs' do
+      pending
     end
-    
+
+    it 'zips the two inputs' do
+      pending
+    end
+
+    it 'flattens the result' do
+      pending
+    end
+
+    it 'removes nil values' do
+      pending
+    end
+  end
+
+  describe '#shuffle' do
     it 'takes an argument (number)' do
       expect{dealer.shuffle}.to raise_error(ArgumentError)
     end
 
-    it 'calls #bottom_break' do
-      expect{dealer}.to receive(:bottom_break)
-    end
+    context 'with valid arguments' do
+      
+      it 'calls #bottom_break' do
+        expect(dealer).to receive(:bottom_break)
+        dealer.shuffle(25)
+      end
 
-    it 'calls #top_break' do
-      pending
-    end
+      it 'calls #top_break' do
+        expect(dealer).to receive(:top_break)
+        dealer.shuffle(25)
+      end
 
+      it 'zips the two sides' do
+        expect(dealer.shuffle(25)).to be_an_instance_of(Array)
+      end
+
+    end
   end
 
 end

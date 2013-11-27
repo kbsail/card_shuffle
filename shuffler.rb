@@ -10,9 +10,9 @@ class Shuffler
   end
 
   def shuffle(num)
-    point = cut_point(num)
-    top_half = top_break(point)
-    bottom_half = bottom_break(point)
+    top_half = top_break(num)
+    bottom_half = bottom_break(num)
+    
   end
 
   def top_break(num)
