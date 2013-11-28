@@ -25,6 +25,12 @@ class Shuffler
     @bottom = cards.take(cut_point)
   end
 
+  def zipped(top_array, bottom_array)
+    array = top_array.zip(bottom_array)
+    array.flatten!
+    array.compact!
+  end
+
 
 
 end
