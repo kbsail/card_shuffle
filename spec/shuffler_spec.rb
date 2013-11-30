@@ -47,31 +47,16 @@ describe Shuffler do
     let(:zipped) { dealer.zipped(input1, input2) }
 
     it 'takes two inputs' do
-      expect(dealer).to receive(:zipped) do |argument1, argument2| 
-        expect(argument1).to be_an_instance_of(Array)
-        expect(argument2).to be_an_instance_of(Array)
-        expect(argument1).not_to eq(argument2)
+      expect(dealer).to receive(:zipped) do |arg1, arg2|
+        expect(arg1).to be_an_instance_of(Array)
+        expect(arg2).to be_an_instance_of(Array)
+        expect(arg1).to_not eq(arg2)
       end
       zipped
     end
 
-    it 'zips the two inputs' do
-      expect(input1).to receive(:zip)
-      zipped
-    end
-
-    it 'flattens the result' do
-      expect(input1).to receive(:flatten!)
-      zipped
-    end
-
-    it 'removes nil values' do
-      expect(input1).to receive(:compact!)
-      zipped
-    end
-
     it 'returns an non-nested array' do
-      expect(zipped).to eq([1,4,2,5,3,6])
+      expect(dealer.zipped([1,2,3], [4,5,6])).to eq([1,4,2,5,3,6])
     end
 
 
