@@ -5,7 +5,7 @@ class Deck
     @cards = (1..n).to_a
   end
 
-  def length
+  def total_cards
     self.cards.length
   end
 

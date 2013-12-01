@@ -3,7 +3,7 @@ require_relative('spec_helper')
 
 describe Shuffler do
   let(:deck) { Deck.new(52) }
-  let(:dealer) { Shuffler.new(deck) }
+  let(:dealer) { Shuffler.new(deck, 25) }
 
   describe '#new' do
     it 'is a shuffler object' do
@@ -15,29 +15,29 @@ describe Shuffler do
     end
 
     it 'can access the cards' do
-      expect(dealer.cards).to be_an_instance_of(Array)
+      expect(dealer.all_cards).to be_an_instance_of(Array)
     end
 
   end
 
   describe '#top_break' do
     it 'returns the top cards' do
-      expect(dealer.top_break(27).last).to eq(52)
+      expect(dealer.top_break.last).to eq(52)
     end
 
     it 'returns the n number of cards' do
-      expect(dealer.top_break(27).length).to eq(27)
+      expect(dealer.top_break.length).to eq(25)
     end
 
   end
 
   describe '#bottom_break' do
     it 'returns the bottom cards' do
-      expect(dealer.bottom_break(25).first).to eq(1)
+      expect(dealer.bottom_break.first).to eq(1)
     end
 
     it 'returns the remaining cards' do
-      expect(dealer.bottom_break(27).length).to eq(25)
+      expect(dealer.bottom_break.length).to eq(27)
     end
   end
 
@@ -59,31 +59,103 @@ describe Shuffler do
       expect(dealer.zipped([1,2,3], [4,5,6])).to eq([1,4,2,5,3,6])
     end
 
-
   end
 
   describe '#shuffle' do
-    it 'takes an argument (number)' do
-      expect{dealer.shuffle}.to raise_error(ArgumentError)
-    end
-
     context 'with valid arguments' do
       
       it 'calls #bottom_break' do
-        expect(dealer).to receive(:bottom_break)
-        dealer.shuffle(25)
+        expect(dealer).to receive(:bottom_break).and_return((1..27).to_a)
+        dealer.shuffle
       end
 
       it 'calls #top_break' do
-        expect(dealer).to receive(:top_break)
-        dealer.shuffle(25)
+        expect(dealer).to receive(:top_break).and_return((28..52).to_a)
+        dealer.shuffle
       end
 
       it 'zips the two sides' do
-        expect(dealer.shuffle(25)).to be_an_instance_of(Array)
+        expect(dealer.shuffle).to be_an_instance_of(Array)
+      end
+
+      context 'with a larger top break' do
+
+        let(:large_shuffler) { Shuffler.new(deck, 30) }
+
+        it 'returns an array with last cards in order(top cards)' do
+          expect(large_shuffler.shuffle[0..2]).to eq([23,1,24])
+          expect(large_shuffler.shuffle[-3..-1]).to eq([50,51,52])
+        end
+      end
+
+      context 'with a smaller top break' do
+        
+        let(:small_shuffler) { Shuffler.new(deck, 20) }
+
+        it 'returns an array with last cards in order(bottom cards)' do
+          expect(small_shuffler.shuffle[0..2]).to eq([33,1,34])
+          expect(small_shuffler.shuffle[-3..-1]).to eq([30,31,32])
+        end
       end
 
     end
+  end
+
+  describe '#equal_original?' do
+    let(:shuffled) { dealer.shuffle }
+
+    it 'takes cards as input' do
+      expect(dealer).to receive(:equal_original?) do |arg1|
+        expect(arg1).to be_an_instance_of(Array)
+        expect(arg1.length).to eq(52)
+      end
+      dealer.equal_original?(shuffled)
+    end
+
+    context 'with cards NOT in original order' do
+      it 'returns false' do
+        expect(dealer.equal_original?(shuffled)).to eq(false)
+      end
+    end
+
+    context 'with cards in original order' do
+      it 'returns true' do
+        cards_ordered = (1..52).to_a
+        expect(dealer.equal_original?(cards_ordered)).to eq(true)
+      end
+    end
+
+  end
+
+  describe '#shuffle_to_start' do
+
+    it 'calls shuffle' do
+      expect(dealer).to receive(:shuffle)
+      dealer.shuffle_to_start
+    end
+
+    it 'checks if the order equals original order' do
+      expect(dealer).to receive(:equal_original?)
+      dealer.shuffle_to_start
+    end
+
+    context 'with non-original order' do
+      it 'shuffles the cards again' do
+        pending
+      end
+
+      it 'adds 1 to counter' do
+        pending
+      end
+
+    end
+
+    context 'with the original order' do
+      it 'returns the number of shuffles' do
+        pending
+      end
+    end
+
   end
 
 end
