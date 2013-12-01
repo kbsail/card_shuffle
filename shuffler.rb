@@ -35,15 +35,14 @@ class Shuffler
   end
 
   def cut_point
-  
+    deck.total_cards - break_number
+  end
 
   def top_break
-    cut_point = deck.total_cards - break_number
     all_cards.drop(cut_point)
   end
 
   def bottom_break
-    cut_point = deck.total_cards - break_number
     all_cards.take(cut_point)
   end
 
