@@ -83,8 +83,9 @@ describe Shuffler do
         let(:large_shuffler) { Shuffler.new(deck, 30) }
 
         it 'returns an array with last cards in order(top cards)' do
-          expect(large_shuffler.shuffle[0..2]).to eq([23,1,24])
-          expect(large_shuffler.shuffle[-3..-1]).to eq([50,51,52])
+          large_shuffler.shuffle
+          expect(large_shuffler.all_cards[0..2]).to eq([23,1,24])
+          expect(large_shuffler.all_cards[-3..-1]).to eq([50,51,52])
         end
       end
 
@@ -93,10 +94,11 @@ describe Shuffler do
         let(:small_shuffler) { Shuffler.new(deck, 20) }
 
         it 'returns an array with last cards in order(bottom cards)' do
-          expect(small_shuffler.shuffle[0..2]).to eq([33,1,34])
-          expect(small_shuffler.shuffle[-3..-1]).to eq([30,31,32])
+          small_shuffler.shuffle
+          expect(small_shuffler.all_cards[0..2]).to eq([33,1,34])
+          expect(small_shuffler.all_cards[-3..-1]).to eq([30,31,32])
         end
-      end
+      end 
 
     end
   end
@@ -114,14 +116,14 @@ describe Shuffler do
 
     context 'with cards NOT in original order' do
       it 'returns false' do
-        expect(dealer.equal_original?(shuffled)).to eq(false)
+        dealer.shuffle
+        expect(dealer.equal_original?).to eq(false)
       end
     end
 
     context 'with cards in original order' do
       it 'returns true' do
-        cards_ordered = (1..52).to_a
-        expect(dealer.equal_original?(cards_ordered)).to eq(true)
+        expect(dealer.equal_original?).to eq(true)
       end
     end
 
@@ -130,22 +132,24 @@ describe Shuffler do
   describe '#shuffle_to_start' do
 
     it 'calls shuffle' do
-      expect(dealer).to receive(:shuffle)
+      expect(dealer).to receive(:shuffle).at_least(:once)
       dealer.shuffle_to_start
     end
 
     it 'checks if the order equals original order' do
-      expect(dealer).to receive(:equal_original?)
+      expect(dealer).to receive(:equal_original?).at_least(:once)
       dealer.shuffle_to_start
     end
 
     context 'with non-original order' do
       it 'shuffles the cards again' do
-        pending
+        expect(dealer).to receive(:shuffle).at_least(:twice)
+        dealer.shuffle_to_start
       end
 
       it 'adds 1 to counter' do
-        pending
+        dealer.shuffle_to_start
+        expect(dealer.all_cards).to eq(1)
       end
 
     end

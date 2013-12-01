@@ -1,5 +1,7 @@
 class Shuffler
-  attr_reader :deck, :initial_cards, :break_number
+
+  attr_accessor :deck
+  attr_reader :initial_cards, :break_number
 
   def initialize(deck, num)
     @deck = deck
@@ -11,13 +13,14 @@ class Shuffler
     deck.cards
   end
 
-  def equal_original?(cards)
-    cards == self.initial_cards ? true : false
+  def equal_original?
+    all_cards == self.initial_cards ? true : false
   end
 
-  def shuffle_to_start
-    equal_original?(all_cards)
+  def shuffle_to_start(n = 1)
+    return n if n > 1 && equal_original?
     shuffle
+    shuffle_to_start(n + 1)
   end
 
   def shuffle
@@ -25,11 +28,14 @@ class Shuffler
     bottom_half = bottom_break
 
     if bottom_half.length > top_half.length
-      zipped(top_half, bottom_half) + bottom_half.drop(top_half.length)
+      deck.cards = zipped(top_half, bottom_half) + bottom_half.drop(top_half.length)
     else 
-      zipped(top_half, bottom_half) 
+      deck.cards = zipped(top_half, bottom_half) 
     end
   end
+
+  def cut_point
+  
 
   def top_break
     cut_point = deck.total_cards - break_number
