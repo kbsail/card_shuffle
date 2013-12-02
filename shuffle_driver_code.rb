@@ -20,3 +20,4 @@ total_time = end_t - start_t
 
 puts "You have to shuffle it #{times} times."
 puts "It took #{total_time}"
+# p shuffler.all_cards
