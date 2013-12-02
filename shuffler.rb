@@ -1,14 +1,15 @@
 class Shuffler
 
-  attr_accessor :deck
+  attr_accessor :deck, :shuffle_count
   attr_reader :initial_cards, :cut_point, :array_difference, :blank_array
 
   def initialize(deck, num)
     @deck = deck
     @initial_cards = deck.cards
     @cut_point = (deck.total_cards - num)
-    @array_difference = (cut_point - num)
-    @blank_array = Array.new(array_difference, nil)
+    # @array_difference = (cut_point - num)
+    @blank_array = Array.new((cut_point - num), nil)
+    @shuffle_count = 0
   end
 
   def all_cards
@@ -19,10 +20,11 @@ class Shuffler
     all_cards == self.initial_cards ? true : false
   end
 
-  def shuffle_to_start(n = 0)
-    return n if n > 0 && equal_original?
-    shuffle
-    shuffle_to_start(n + 1)
+  def shuffle_to_start
+    until self.shuffle_count > 0 && equal_original?
+      shuffle
+      self.shuffle_count += 1
+    end
   end
 
   def shuffle
