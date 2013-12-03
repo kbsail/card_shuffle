@@ -5,12 +5,12 @@ require_relative 'shuffler'
 puts 'How many cards would you like to use?'
 cards = gets.chomp.to_i
 
-new_deck = Deck.new(cards)
+# new_deck = Deck.new(cards)
 
 puts 'Where should the cut point be?'
 cut_point = gets.chomp.to_i
 
-shuffler = Shuffler.new(new_deck, cut_point)
+shuffler = Shuffler.new(cards, cut_point)
 
 start_t = Time.now
 times = shuffler.shuffle_to_start
